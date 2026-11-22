@@ -17,6 +17,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import CLASSES, ROOT, draw_boxes
+from live_component import live_scanner
 
 # Visual assumption from the generation prompts: ~14 cm of ground across a 1254 px frame.
 GROUND_WIDTH_MM = 140
@@ -110,13 +111,20 @@ with tab1:
                 st.info("Nothing detected above the threshold.")
 
 with tab2:
-    modes = ["Snapshot (browser camera)", "Replay test images"]
-    if not ON_SERVER:  # a live webcam only works on the computer running the app
-        modes.insert(0, "Live camera")
+    modes = ["Live scan (phone/browser)", "Snapshot (browser camera)", "Replay test images"]
+    if not ON_SERVER:  # an OpenCV webcam only works on the computer running the app
+        modes.insert(1, "Live camera")
     mode = st.radio("Source", modes, horizontal=True)
 
+    # ---------------------------------------------------------------- live, on-device (browser)
+    if mode == "Live scan (phone/browser)":
+        st.write("Live detection on the camera feed. The model runs **inside your browser** (on the phone itself), "
+                 "so nothing is uploaded. Hold the phone **straight down**, about 10–15 cm above the pavement, "
+                 "and walk slowly along the joints.")
+        live_scanner(conf, [c in show for c in CLASSES])
+
     # ---------------------------------------------------------------- live camera
-    if mode == "Live camera":
+    elif mode == "Live camera":
         st.write("Hold the camera **straight down** at the pavement, about 10–15 cm above it (like the robot), "
                  "and walk slowly along the joints. To use your phone, run it as a webcam (e.g. Camo) "
                  "and pick its camera number.")

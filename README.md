@@ -9,8 +9,8 @@ in top-down photos of pavement.
 
 ## Use it
 - **Detect** tab: upload a photo, take one with your phone (Browse files → Take photo), or pick an example.
-- **Robot scan** tab: take photos with the browser camera one after another and keep a tally,
-  or replay the example frames. When run locally, a live webcam mode is also available.
+- **Robot scan** tab: **Live scan** runs the model on the live camera feed *inside the browser*
+  (ONNX Runtime Web, nothing is uploaded), **Snapshot** takes single photos, **Replay** plays the examples.
 
 Hold the camera straight down, about 10–15 cm above the pavement, like the robot's camera.
 
@@ -30,6 +30,8 @@ streamlit run src/demo_app.py
 |---|---|
 | `src/demo_app.py` | the Streamlit app |
 | `src/common.py` | class names, colours, box drawing |
+| `src/live_component.py` | live in-browser scanner (camera + ONNX Runtime Web) |
+| `src/static/seedling_all.onnx` | the same model exported to ONNX for the browser |
 | `weights/seedling_all.pt` | trained YOLO11n weights (5.5 MB) |
 | `samples/` | 10 synthetic test images + 4 real phone photos (`real_…`) |
 | `requirements.txt`, `packages.txt` | Python and system packages for the cloud |
